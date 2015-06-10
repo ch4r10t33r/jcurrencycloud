@@ -1,5 +1,5 @@
 package com.zincoshine.jcurrencycloud;
 
-public interface Payment {
+public interface BeneficiariesApi {
 
 }

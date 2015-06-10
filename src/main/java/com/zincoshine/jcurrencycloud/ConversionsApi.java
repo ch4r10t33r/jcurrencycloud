@@ -1,5 +1,5 @@
 package com.zincoshine.jcurrencycloud;
 
-public interface Payer {
+public interface ConversionsApi {
 
 }

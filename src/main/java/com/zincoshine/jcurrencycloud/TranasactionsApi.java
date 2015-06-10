@@ -1,5 +1,5 @@
 package com.zincoshine.jcurrencycloud;
 
-public interface Settlement {
+public interface TranasactionsApi {
 
 }

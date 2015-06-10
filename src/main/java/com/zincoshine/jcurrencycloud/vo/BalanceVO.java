@@ -2,7 +2,7 @@ package com.zincoshine.jcurrencycloud.vo;
 
 import java.util.Date;
 
-public class BalanceInfo {
+public class BalanceVO {
 	private String id;
 	private String accountId;
 	private String currency;
