@@ -23,25 +23,26 @@ import com.zincoshine.jcurrencycloud.exception.JCurrencyCloudException;
 
 public class AuthenticateApiImpl implements AuthenticateApi {
 
-	public AuthToken beginSession(String url, String loginId, String apiKey) throws JCurrencyCloudException {
-		
+	public AuthToken beginSession(String url, String loginId, String apiKey)
+			throws JCurrencyCloudException {
+
 		Authentication auth = null;
 		AuthToken authToken = null;
-		
+
 		try {
 			Gson gson = new Gson();
-			
+
 			HttpClient httpClient = new DefaultHttpClient();
 			List<NameValuePair> params = new LinkedList<NameValuePair>();
-			
-			params.add(new BasicNameValuePair("login_id",loginId));
-			params.add(new BasicNameValuePair("api_key",apiKey));
-			
-			HttpPost httpPost = new HttpPost(url+"/authenticate/api");
+
+			params.add(new BasicNameValuePair("login_id", loginId));
+			params.add(new BasicNameValuePair("api_key", apiKey));
+
+			HttpPost httpPost = new HttpPost(url + "/authenticate/api");
 			httpPost.setEntity(new UrlEncodedFormEntity(params));
-			
+
 			httpPost.addHeader("User-Agent", "HTTP/1.1");
-			
+
 			HttpResponse response = httpClient.execute(httpPost);
 
 			if (response.getStatusLine().getStatusCode() == 200) {
@@ -49,36 +50,34 @@ public class AuthenticateApiImpl implements AuthenticateApi {
 						(response.getEntity().getContent())));
 				StringBuffer sb = new StringBuffer();
 				String line = null;
-				while((line = br.readLine()) != null) {
+				while ((line = br.readLine()) != null) {
 					sb.append(line);
 				}
-				auth = gson.fromJson(sb.toString(),Authentication.class);
-				if(auth != null) {
+				auth = gson.fromJson(sb.toString(), Authentication.class);
+				if (auth != null) {
 					authToken = new AuthToken();
 					authToken.setAuthToken(auth.getToken());
 					authToken.setUrl(url);
 				}
 			}
-			
-			httpClient.getConnectionManager().shutdown();			
-			
-		} catch(Exception e) {
+
+			httpClient.getConnectionManager().shutdown();
+
+		} catch (Exception e) {
 			throw new JCurrencyCloudException(e.toString());
 		}
 		return authToken;
 	}
 
-	public void endSession(AuthToken authToken)
-			throws JCurrencyCloudException {
+	public void endSession(AuthToken authToken) throws JCurrencyCloudException {
 		try {
-					
+
 			HttpClient httpClient = new DefaultHttpClient();
 
-			
-			HttpPost httpPost = new HttpPost(authToken.getUrl());		
+			HttpPost httpPost = new HttpPost(authToken.getUrl());
 			httpPost.addHeader("X-Auth-Token", authToken.getAuthToken());
-			//httpPost.addHeader("User-Agent", "HTTP/1.1");
-			
+			// httpPost.addHeader("User-Agent", "HTTP/1.1");
+
 			HttpResponse response = httpClient.execute(httpPost);
 
 			if (response.getStatusLine().getStatusCode() == 200) {
@@ -86,15 +85,15 @@ public class AuthenticateApiImpl implements AuthenticateApi {
 						(response.getEntity().getContent())));
 				StringBuffer sb = new StringBuffer();
 				String line = null;
-				while((line = br.readLine()) != null) {
+				while ((line = br.readLine()) != null) {
 					sb.append(line);
 				}
 			}
-			
-			httpClient.getConnectionManager().shutdown();			
-			
-		} catch(Exception e) {
+
+			httpClient.getConnectionManager().shutdown();
+
+		} catch (Exception e) {
 			throw new JCurrencyCloudException(e.toString());
-		}	
+		}
 	}
 }
